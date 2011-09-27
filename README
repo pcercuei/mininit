@@ -9,8 +9,7 @@ You will need to specify three parameters on the kernel command line:
 - 'loop0=X' where X is the path to the image (e.g. /boot/rootfs.bin);
 - 'root=/dev/loop0' which defines the loopback mount as being the root file system.
 
-For each path specified as an argument of the 'boot' kernel parameter, min-init will try to mount the corresponding drive
-with every filesystem type the kernel understands, until the mount eventually succeeds.
+For each path specified as an argument of the 'boot' kernel parameter, min-init will try to mount the corresponding drive with every filesystem type the kernel understands, until the mount eventually succeeds.
 
 Developed for OpenDingux (http://www.treewalker.org/opendingux/)
 By Paul Cercueil <paul@crapouillou.net>
