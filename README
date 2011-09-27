@@ -1,0 +1,16 @@
+Min-init
+
+Based on mininit from Ignacio Garcia Perez
+(http://code.google.com/p/dingoo-linux/)
+
+This simple program permits to use a romfs/squashfs image as the root filesystem of a linux system.
+You will need to specify three parameters on the kernel command line:
+- 'boot=X' where X is a comma-separated list of the possible locations for the filesystem on which is stored the image;
+- 'loop0=X' where X is the path to the image (e.g. /boot/rootfs.bin);
+- 'root=/dev/loop0' which defines the loopback mount as being the root file system.
+
+For each path specified as an argument of the 'boot' kernel parameter, min-init will try to mount the corresponding drive
+with every filesystem type the kernel understands, until the mount eventually succeeds.
+
+Developed for OpenDingux (http://www.treewalker.org/opendingux/)
+By Paul Cercueil <paul@crapouillou.net>
