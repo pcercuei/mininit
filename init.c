@@ -115,8 +115,7 @@ static int __multi_mount (
 			c = *s;
 			*s = '\0';
 
-			if ((access(t, R_OK) >= 0)
-				&& !__mount(t, target, type, flags, data)) {
+			if (!__mount(t, target, type, flags, data)) {
 				INFO("%s mounted on %s\n", t, target);
 				*s = c;
 				return 0;
