@@ -202,8 +202,7 @@ int main(int argc, char **argv)
 	for (i=1; i<paramc; i++) {
 		if (strncmp(paramv[i], "boot=", 5))
 			continue;
-//		__multi_mount(paramv[i]+5, "/boot", NULL, MS_RDONLY, "utf8", 20);
-		if ( __multi_mount(paramv[i]+5, "/boot", NULL, MS_RDONLY, "utf8", 20) )
+		if ( __multi_mount(paramv[i]+5, "/boot", NULL, MS_RDONLY, NULL, 20) )
 			return -1;
 		boot = 1;
 		break;
