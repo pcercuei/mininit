@@ -78,10 +78,16 @@ static int __mount (
 		return -1;
 
 	nb = __mkparam(cbuf, tokens, sizeof(tokens)/sizeof(tokens[0]), '\n');
+
 	while (nb--) {
 		/* note: the possible filesystems all start with a
-		 * tabulation in that file */
-		if (*tokens[nb] != '\t') continue;
+		 * tabulation in that file, except ubifs */
+		if (!strncmp(tokens[nb], "nodev\tubifs", 11))
+			tokens[nb] += 5;
+		else if (*tokens[nb] != '\t')
+			continue;
+
+		/* skip the tabulation */
 		tokens[nb]++;
 
 		if (!mount(source, target, tokens[nb], flags, data))
