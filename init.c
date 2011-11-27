@@ -167,7 +167,7 @@ int main(int argc, char **argv)
 		NULL,
 	};
 
-	int fd, boot;
+	int fd, boot = 0;
 
 	char sbuf [256];
 	char cbuf[4096];
