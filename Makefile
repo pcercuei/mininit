@@ -4,14 +4,19 @@ CC = $(CROSS_COMPILE)gcc
 CFLAGS ?= -Wall -O2 -mips32 -mtune=mips32r2 -fomit-frame-pointer
 LDFLAGS = -s -static
 
-TARGET = mininit
+MININIT = mininit
+SPLASHKILL = splashkill
 
-OBJS = loop.o init.o
+M_OBJS = loop.o init.o
+S_OBJS = splashkill.o
 
-all: $(TARGET)
+$(MININIT): $(M_OBJS)
+	$(CC) $(LDFLAGS) -o $@ $(M_OBJS) $(LIBS)
 
-$(TARGET): $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+$(SPLASHKILL): $(S_OBJS)
+	$(CC) $(LDFLAGS) -o $@ $(S_OBJS) $(LIBS)
+
+all: $(MININIT) $(SPLASHKILL)
 
 clean:
-	-rm -f $(OBJS) $(TARGET)
+	-rm -f $(M_OBJS) $(S_OBJS) $(MININIT) $(SPLASHKILL)
