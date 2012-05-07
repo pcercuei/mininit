@@ -202,7 +202,7 @@ int main(int argc, char **argv)
 	for (i=1; i<paramc; i++) {
 		if (strncmp(paramv[i], "boot=", 5))
 			continue;
-		if ( __multi_mount(paramv[i]+5, "/boot", NULL, MS_RDONLY, NULL, 20) )
+		if ( __multi_mount(paramv[i]+5, "/boot", NULL, 0, NULL, 20) )
 			return -1;
 		boot = 1;
 		break;
@@ -218,6 +218,18 @@ int main(int argc, char **argv)
 
 		/* update the loop device filename if needed */
 		loop_dev[9] = paramv[i][4];
+
+		/* Check for a rootfs update */
+		if (boot && !access("/boot/update_r.bin", R_OK | W_OK)) {
+			char old[128];
+			DEBUG("RootFS update found!\n");
+
+			sprintf(old, "%s.old", paramv[i] + 6);
+			rename(paramv[i] + 6, old);
+			rename("/boot/update_r.bin", paramv[i] + 6);
+
+			sync();
+		}
 
 		DEBUG("Setting up loopback: \'%s\' associated to \'%s\'.\n",
 			loop_dev, paramv[i]+6);
