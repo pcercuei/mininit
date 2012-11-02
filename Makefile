@@ -1,7 +1,7 @@
 
-CROSS_COMPILE ?= mipsel-linux-
+CROSS_COMPILE ?= /opt/gcw0-toolchain/usr/bin/mipsel-gcw0-linux-uclibc-
 CC = $(CROSS_COMPILE)gcc
-CFLAGS ?= -Wall -O2 -mips32 -mtune=mips32r2 -fomit-frame-pointer
+CFLAGS ?= -Wall -O2 -fomit-frame-pointer
 LDFLAGS = -s -static
 
 MININIT = mininit
