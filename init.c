@@ -158,7 +158,7 @@ static int __losetup (
 
 int main(int argc, char **argv)
 {
-	char *loop_dev = "/dev/loop0";
+	char loop_dev[10] = "/dev/loop0";
 	const char *inits [] = {
 		"/sbin/init",
 		"/etc/init",
