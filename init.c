@@ -167,7 +167,7 @@ int main(int argc, char **argv)
 		NULL,
 	};
 
-	int fd, boot = 0;
+	int fd, boot = 0, is_backup = 0;
 
 	char sbuf [256];
 	char cbuf[4096];
@@ -200,12 +200,18 @@ int main(int argc, char **argv)
 	 * Note that we specify 20 retries (2 seconds), just in case it is
 	 * a hotplug device which takes some time to detect and initialize. */
 	for (i=1; i<paramc; i++) {
+		if (!strcmp(paramv[i], "rootfs_bak"))
+			is_backup = 1;
+
 		if (strncmp(paramv[i], "boot=", 5))
 			continue;
+
 		if ( __multi_mount(paramv[i]+5, "/boot", NULL, 0, NULL, 20) )
 			return -1;
 		boot = 1;
-		break;
+
+		if (boot && is_backup)
+			break;
 	}
 
 	if (!boot)
@@ -221,13 +227,15 @@ int main(int argc, char **argv)
 
 		/* Check for a rootfs update */
 		if (boot && !access("/boot/update_r.bin", R_OK | W_OK)) {
-			char old[128];
 			DEBUG("RootFS update found!\n");
 
-			sprintf(old, "%s.old", paramv[i] + 6);
-			rename(paramv[i] + 6, old);
-			rename("/boot/update_r.bin", paramv[i] + 6);
+			if (!is_backup) {
+				char old[128];
+				sprintf(old, "%s.old", paramv[i] + 6);
+				rename(paramv[i] + 6, old);
+			}
 
+			rename("/boot/update_r.bin", paramv[i] + 6);
 			sync();
 		}
 
