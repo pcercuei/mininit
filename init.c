@@ -219,31 +219,36 @@ int main(int argc, char **argv)
 
 	/* Process "loop" parameter (only one) */
 	for (i=1; i<paramc; i++) {
+		char old[128], *name;
+
 		if (strncmp(paramv[i], "loop", 4)
 			|| paramv[i][5] != '=') continue;
 
 		/* update the loop device filename if needed */
 		loop_dev[9] = paramv[i][4];
 
+		name = paramv[i] + 6;
+		sprintf(old, "%s.old", name);
+
 		/* Check for a rootfs update */
 		if (boot && !access("/boot/update_r.bin", R_OK | W_OK)) {
 			DEBUG("RootFS update found!\n");
-			char old[128];
-			sprintf(old, "%s.old", paramv[i] + 6);
 
 			/* If rootfs_bak was not passed, or the backup is not available,
 			 * make a backup of the current rootfs before the update */
-			if (!is_backup || access(old, F_OK)) {
-				rename(paramv[i] + 6, old);
-			}
+			if (!is_backup || access(old, F_OK))
+				rename(name, old);
 
-			rename("/boot/update_r.bin", paramv[i] + 6);
+			rename("/boot/update_r.bin", name);
 			sync();
 		}
 
+		if (is_backup && !access(old, F_OK))
+			name = old;
+
 		DEBUG("Setting up loopback: \'%s\' associated to \'%s\'.\n",
-			loop_dev, paramv[i]+6);
-		__losetup(loop_dev, paramv[i]+6);
+			loop_dev, name);
+		__losetup(loop_dev, name);
 		break;
 	}
 
