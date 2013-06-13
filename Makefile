@@ -1,6 +1,7 @@
 
-CROSS_COMPILE ?= /opt/gcw0-toolchain/usr/bin/mipsel-gcw0-linux-uclibc-
-CC = $(CROSS_COMPILE)gcc
+CROSS_COMPILE ?= mipsel-linux-
+COMPILER ?= gcc
+CC = $(CROSS_COMPILE)$(COMPILER)
 CFLAGS ?= -Wall -O2 -fomit-frame-pointer
 LDFLAGS = -s -static
 
