@@ -228,10 +228,12 @@ int main(int argc, char **argv)
 		/* Check for a rootfs update */
 		if (boot && !access("/boot/update_r.bin", R_OK | W_OK)) {
 			DEBUG("RootFS update found!\n");
+			char old[128];
+			sprintf(old, "%s.old", paramv[i] + 6);
 
-			if (!is_backup) {
-				char old[128];
-				sprintf(old, "%s.old", paramv[i] + 6);
+			/* If rootfs_bak was not passed, or the backup is not available,
+			 * make a backup of the current rootfs before the update */
+			if (!is_backup || access(old, F_OK)) {
 				rename(paramv[i] + 6, old);
 			}
 
