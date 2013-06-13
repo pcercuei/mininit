@@ -217,7 +217,7 @@ int main(int argc, char **argv)
 	if (!boot)
 		WARNING("\'boot\' parameter not found.\n");
 
-	/* Process "loop" parameter (multiple) */
+	/* Process "loop" parameter (only one) */
 	for (i=1; i<paramc; i++) {
 		if (strncmp(paramv[i], "loop", 4)
 			|| paramv[i][5] != '=') continue;
@@ -244,6 +244,7 @@ int main(int argc, char **argv)
 		DEBUG("Setting up loopback: \'%s\' associated to \'%s\'.\n",
 			loop_dev, paramv[i]+6);
 		__losetup(loop_dev, paramv[i]+6);
+		break;
 	}
 
 	/* Process "root" parameter (only one, allow comma-separated list).
