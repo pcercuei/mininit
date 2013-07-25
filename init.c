@@ -228,7 +228,7 @@ int main(int argc, char **argv)
 		loop_dev[9] = paramv[i][4];
 
 		name = paramv[i] + 6;
-		sprintf(old, "%s.old", name);
+		sprintf(old, "%s.bak", name);
 
 		/* Check for a rootfs update */
 		if (boot && !access("/boot/update_r.bin", R_OK | W_OK)) {
