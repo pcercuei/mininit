@@ -232,14 +232,23 @@ int main(int argc, char **argv)
 
 		/* Check for a rootfs update */
 		if (boot && !access("/boot/update_r.bin", R_OK | W_OK)) {
+			char sha1_file[128];
+			sprintf(sha1_file, "%s.sha1", name);
+
 			DEBUG("RootFS update found!\n");
 
 			/* If rootfs_bak was not passed, or the backup is not available,
 			 * make a backup of the current rootfs before the update */
-			if (!is_backup || access(old, F_OK))
+			if (!is_backup || access(old, F_OK)) {
+				char old_sha1_file[128];
+				sprintf(old_sha1_file, "%s.sha1", old);
+
 				rename(name, old);
+				rename(sha1_file, old_sha1_file);
+			}
 
 			rename("/boot/update_r.bin", name);
+			rename("/boot/update_r.bin.sha1", sha1_file);
 			sync();
 		}
 
