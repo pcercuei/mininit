@@ -62,15 +62,14 @@ static int __mount (
 		const char *source,
 		const char *target,
 		const char *type,
-		unsigned long flags,
-		const void *data)
+		unsigned long flags)
 {
 	int nb;
 	char cbuf[4096];
 	char * tokens[64];
 
 	if (type || (flags & MS_MOVE))
-		return mount(source, target, type, flags, data);
+		return mount(source, target, type, flags, NULL);
 
 	/* The filesystem is unknown.
 	 * We will try each filesystem supported by the kernel. */
@@ -90,7 +89,7 @@ static int __mount (
 		/* skip the tabulation */
 		tokens[nb]++;
 
-		if (!mount(source, target, tokens[nb], flags, data))
+		if (!mount(source, target, tokens[nb], flags, NULL))
 			return 0;
 	}
 
@@ -103,7 +102,6 @@ static int __multi_mount (
 		const char *target,
 		const char *type,
 		unsigned long flags,
-		const void *data,
 		int retries)
 {
 	size_t try;
@@ -115,7 +113,7 @@ static int __multi_mount (
 			c = *s;
 			*s = '\0';
 
-			if (!__mount(t, target, type, flags, data)) {
+			if (!__mount(t, target, type, flags)) {
 				INFO("%s mounted on %s\n", t, target);
 				*s = c;
 				return 0;
@@ -206,7 +204,7 @@ int main(int argc, char **argv)
 		if (strncmp(paramv[i], "boot=", 5))
 			continue;
 
-		if ( __multi_mount(paramv[i]+5, "/boot", NULL, 0, NULL, 20) )
+		if ( __multi_mount(paramv[i]+5, "/boot", NULL, 0, 20) )
 			return -1;
 		boot = 1;
 
@@ -267,7 +265,7 @@ int main(int argc, char **argv)
 	for (i=1; i<paramc; i++) {
 		if (strncmp(paramv[i], "root=", 5))
 			continue;
-		if ( __multi_mount(paramv[i]+5, "/root", NULL, MS_RDONLY, NULL, 20) )
+		if ( __multi_mount(paramv[i]+5, "/root", NULL, MS_RDONLY, 20) )
 			return -1;
 		break;
 	}
