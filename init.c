@@ -215,6 +215,13 @@ int main(int argc, char **argv)
 	if (!boot)
 		WARNING("\'boot\' parameter not found.\n");
 
+	/* Check for a modules fs update */
+	if (!access("/boot/update_m.bin", R_OK | W_OK)) {
+		DEBUG("Modules update found!\n");
+		rename("/boot/modules.squashfs", "/boot/modules.squashfs.bak");
+		rename("/boot/update_m.bin", "/boot/modules.squashfs");
+	}
+
 	/* Process "loop" parameter (only one) */
 	for (i=1; i<paramc; i++) {
 		char old[128], *name;
