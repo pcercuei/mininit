@@ -219,7 +219,9 @@ int main(int argc, char **argv)
 	if (!access("/boot/update_m.bin", R_OK | W_OK)) {
 		DEBUG("Modules update found!\n");
 		rename("/boot/modules.squashfs", "/boot/modules.squashfs.bak");
+		rename("/boot/modules.squashfs.sha1", "/boot/modules.squashfs.bak.sha1");
 		rename("/boot/update_m.bin", "/boot/modules.squashfs");
+		rename("/boot/update_m.bin.sha1", "/boot/modules.squashfs.sha1");
 	}
 
 	/* Process "loop" parameter (only one) */
