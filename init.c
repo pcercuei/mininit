@@ -293,6 +293,14 @@ int main(int argc, char **argv)
 			ERROR("Unable to move the \'/boot\' mountpoint.\n");
 			return -1;
 		}
+
+		/* Remount /boot readonly */
+		DEBUG("Remounting \'/root/boot\' read-only\n");
+		if ( mount("/root/boot", "/root/boot", NULL,
+						MS_REMOUNT | MS_RDONLY, NULL) ) {
+			ERROR("Unable to remount \'/root/boot\' read-only.\n");
+			return -1;
+		}
 	}
 
 	/* Now let's switch to the new root */
